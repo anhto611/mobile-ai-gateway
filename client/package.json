@@ -6,13 +6,39 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["react-native", "expo", "ai", "gemini", "claude", "openai", "cloudflare-workers"],
-  "repository": { "type": "git", "url": "git+https://github.com/anhto611/mobile-ai-gateway.git", "directory": "client" }
+  "keywords": [
+    "react-native",
+    "expo",
+    "ai",
+    "gemini",
+    "claude",
+    "openai",
+    "cloudflare-workers"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anhto611/mobile-ai-gateway.git",
+    "directory": "client"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "homepage": "https://github.com/anhto611/mobile-ai-gateway/tree/main/client",
+  "engines": {
+    "node": ">=18"
+  }
 }
