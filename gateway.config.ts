@@ -24,20 +24,18 @@ export default defineConfig({
   // cors: { allowOrigins: ['https://example.com'] },
 
   features: {
-    'parse-expense': {
-      description: 'Turns a sentence like "lunch 12.50 with Sam yesterday" into a structured expense.',
+    summarize: {
+      description: 'Summarizes an article, note or message into a title, a short summary and tags.',
       input: {
         fields: {
-          text: { type: 'string', required: true, maxLength: 500 },
-          today: { type: 'string', required: true, maxLength: 10 },
-          currency: { type: 'string', maxLength: 3 },
+          text: { type: 'string', required: true, maxLength: 12000 },
+          language: { type: 'string', maxLength: 30 },
         },
       },
       prompt: [
-        'Extract one expense from the text below.',
-        'Today is {{today}}. Use this date when the text gives no date, and resolve words like "yesterday" from it.',
-        'Default currency: {{currency}}. Use it when the text does not name a currency.',
-        'If the text contains no expense, return amount 0 and category "other".',
+        'Summarize the text below for someone reading on a phone.',
+        'Write the title, summary and tags in {{language}}. If no language is given, use the language of the text.',
+        'The summary is 2 to 3 sentences. Tags are 1 to 5 short lowercase topics.',
         '',
         'Text: """{{text}}"""',
       ].join('\n'),
@@ -45,23 +43,21 @@ export default defineConfig({
         type: 'json',
         schema: {
           type: 'object',
-          required: ['amount', 'currency', 'category', 'note', 'date'],
+          required: ['title', 'summary', 'tags'],
           properties: {
-            amount: { type: 'number', minimum: 0 },
-            currency: { type: 'string', description: 'ISO 4217 code, e.g. USD' },
-            category: { type: 'string', enum: ['food', 'transport', 'shopping', 'bills', 'health', 'entertainment', 'travel', 'other'] },
-            note: { type: 'string', description: 'Short description, max 60 characters' },
-            date: { type: 'string', description: 'YYYY-MM-DD' },
+            title: { type: 'string', description: 'Max 80 characters' },
+            summary: { type: 'string' },
+            tags: { type: 'array', maxItems: 5, items: { type: 'string' } },
           },
         },
       },
       models: [
-        { provider: 'groq', model: 'openai/gpt-oss-120b' },
         { provider: 'gemini', model: 'gemini-3.5-flash-lite' },
+        { provider: 'groq', model: 'openai/gpt-oss-120b' },
         { provider: 'anthropic', model: 'claude-haiku-5-5' },
       ],
-      limits: { free: 50, premium: 'unlimited' },
-      temperature: 0.1,
+      limits: { free: 20, premium: 'unlimited' },
+      temperature: 0.3,
       maxOutputTokens: 2048,
     },
 

@@ -23,38 +23,35 @@ export const ai = createGateway({
   getPurchaseProof: async () => null,
 });
 
-interface Expense {
-  amount: number;
-  currency: string;
-  category: string;
-  note: string;
-  date: string;
+interface Summary {
+  title: string;
+  summary: string;
+  tags: string[];
 }
 
-export function QuickAdd() {
+export function SummarizeBox() {
   const [text, setText] = useState('');
   const [message, setMessage] = useState('');
 
-  async function onAdd() {
+  async function onSummarize() {
     try {
-      const today = new Date().toISOString().slice(0, 10);
-      const { data, usage } = await ai.run<Expense>('parse-expense', { text, today, currency: 'USD' });
-      setMessage(`${data.note}: ${data.amount} ${data.currency} (${data.category}). ${usage.remaining ?? 'Unlimited'} left today.`);
+      const { data, usage } = await ai.run<Summary>('summarize', { text });
+      setMessage(`${data.title}\n\n${data.summary}\n\n${usage.remaining ?? 'Unlimited'} summaries left today.`);
     } catch (err) {
       if (err instanceof GatewayError && err.code === 'quota_exceeded') {
-        setMessage('You have used all free AI entries for today. Upgrade for more.');
+        setMessage('You have used all free summaries for today. Upgrade for more.');
       } else if (err instanceof GatewayError && err.retryable) {
         setMessage('The AI is busy. Try again in a moment.');
       } else {
-        setMessage('Could not read that. Try writing it differently.');
+        setMessage('Could not summarize that. Try a shorter text.');
       }
     }
   }
 
   return (
     <View>
-      <TextInput value={text} onChangeText={setText} placeholder="Lunch 12.50 with Sam" />
-      <Button title="Add" onPress={onAdd} />
+      <TextInput value={text} onChangeText={setText} placeholder="Paste an article or a long message" multiline />
+      <Button title="Summarize" onPress={onSummarize} />
       <Text>{message}</Text>
     </View>
   );

@@ -6,7 +6,7 @@ Typed client for [mobile-ai-gateway](https://github.com/anhto611/mobile-ai-gatew
 import { createGateway, GatewayError } from 'mobile-ai-gateway-client';
 
 const ai = createGateway({ baseUrl: 'https://your-gateway.workers.dev', deviceId: 'install-uuid' });
-const { data, usage } = await ai.run<{ amount: number }>('parse-expense', { text: 'coffee 4.5', today: '2026-11-18' });
+const { data, usage } = await ai.run<{ title: string; summary: string }>('summarize', { text: article });
 ```
 
 `run` throws a `GatewayError` with a `code` (`quota_exceeded`, `rate_limited`, `ai_failed`, `network_error`, `timeout` and others), the HTTP `status`, any `details` from the server, and a `retryable` flag.

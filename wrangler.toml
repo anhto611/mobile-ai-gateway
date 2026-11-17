@@ -1,6 +1,8 @@
 name = "mobile-ai-gateway"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
+workers_dev = true
+preview_urls = false
 
 # Gemini refuses requests from some regions. Running the Worker in a fixed US region avoids
 # random "User location is not supported" errors. Remove this block if you do not use Gemini.

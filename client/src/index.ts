@@ -2,7 +2,7 @@
  * Client for mobile-ai-gateway. No dependencies, uses the global fetch.
  *
  *   const ai = createGateway({ baseUrl: 'https://my-gateway.workers.dev', deviceId });
- *   const { data, usage } = await ai.run<Expense>('parse-expense', { text: 'coffee 4.5', today: '2026-11-18' });
+ *   const { data, usage } = await ai.run<Summary>('summarize', { text: article });
  */
 
 export type ErrorCode =

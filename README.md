@@ -12,7 +12,7 @@ const { data, usage } = await ai.run('scan-receipt', {}, { image: { data: base64
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/anhto611/mobile-ai-gateway)
 
-I built this pattern for [Pig Money](https://apps.apple.com/app/id6756267838), an expense tracker where users type or photograph expenses and AI fills them in. This repo is a clean, generic rewrite of that backend so any app can use it.
+I first built this pattern for the AI features of [Pig Money](https://apps.apple.com/app/id6756267838), my expense tracker app. This repo is a generic version that any app can use: it contains no Pig Money code, prompts or data.
 
 ## What it does
 
@@ -44,10 +44,10 @@ npm run deploy
 Wrangler prints your URL, for example `https://mobile-ai-gateway.<you>.workers.dev`. Try it:
 
 ```bash
-curl https://mobile-ai-gateway.<you>.workers.dev/v1/features/parse-expense \
+curl https://mobile-ai-gateway.<you>.workers.dev/v1/features/summarize \
   -H 'Content-Type: application/json' \
   -H 'X-Device-Id: test-device-001' \
-  -d '{"input": {"text": "coffee 4.50 this morning", "today": "2026-11-18", "currency": "USD"}}'
+  -d '{"input": {"text": "Paste any article or long message here..."}}'
 ```
 
 Models without a key are skipped, so a single Gemini key is enough to run all three example features.
@@ -94,7 +94,7 @@ const ai = createGateway({
 });
 
 try {
-  const { data, usage } = await ai.run<Expense>('parse-expense', { text, today, currency: 'USD' });
+  const { data, usage } = await ai.run<Summary>('summarize', { text: article });
 } catch (err) {
   if (err instanceof GatewayError && err.code === 'quota_exceeded') showUpgrade(err.details.resetsAt);
 }
